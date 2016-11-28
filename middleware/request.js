@@ -30,4 +30,5 @@ export default async function renderer(ctx, next) {
     // const reactString = ReactDOMServer.renderToString(<App />);
     ctx.body = layout;
     ctx.type = 'text/html';
+    next();
 }

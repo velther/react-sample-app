@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import s from './Post.styl';
 
 export default function Post({ post, user }) {
@@ -10,3 +10,8 @@ export default function Post({ post, user }) {
         </div>
     );
 }
+
+Post.prototype.propTypes = {
+    post: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
+};

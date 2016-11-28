@@ -12,7 +12,6 @@ class Posts extends Component {
     }
 
     render() {
-        console.log(this.props);
         const { posts, usersById } = this.props;
         return (
             <div className={s.Posts}>
@@ -21,6 +20,12 @@ class Posts extends Component {
             </div>
         );
     }
+
+    static propTypes = {
+        dispatch: PropTypes.func.isRequired,
+        posts: PropTypes.array.isRequired,
+        usersById: PropTypes.object.isRequired
+    };
 }
 
 export default branch({
