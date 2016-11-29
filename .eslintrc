@@ -120,7 +120,7 @@
         "one-var": [2, "never"],
         "one-var-declaration-per-line": [2, "always"],
         "camelcase": 2,
-        "jsx-quotes": [2, "prefer-single"],
+        "jsx-quotes": [2, "prefer-double"],
         "react/jsx-uses-vars": 2,
         "react/jsx-no-duplicate-props": [2, { "ignoreCase": true }],
         "react/jsx-no-undef": 2,
