@@ -45,7 +45,7 @@ module.exports = {
     },
     resolve: {
         modules: ['node_modules'],
-        extensions: [ '.js', '.json', '.jsx']
+        extensions: ['.js', '.json', '.jsx']
     },
     watch: isDev,
     devtool: isDev ? 'source-map' : 'eval',
