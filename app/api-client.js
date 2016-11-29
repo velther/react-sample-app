@@ -1,13 +1,25 @@
-const API_URL = 'http://localhost:9000/api'
+const API_URL = 'http://localhost:9000/api';
 
-async function request(method, id = '') {
+async function request({ method, id = '', query }) {
+    let url = `${API_URL}/${method}/${id}`;
+
+    if (query !== undefined) {
+        const searchParams = new URLSearchParams();
+        for (let key in query) {
+            if (query.hasOwnProperty(key)) {
+                searchParams.append(key, query[key]);
+            }
+        }
+        url += `?${searchParams.toString()}`;
+    }
+
     const response = await fetch(
-        `${API_URL}/${method}/${id}`,
+        url,
         {
             method: 'get',
             mode: 'cors',
             credentials: 'include',
-            headers: new Headers({ 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' })
+            headers: new Headers({ 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' })
         }
     );
 
@@ -16,12 +28,16 @@ async function request(method, id = '') {
 
 const API = {
     loadPosts() {
-        return request('posts');
+        return request({ method: 'posts' });
     },
 
     loadUsers() {
-        return request('users');
-    }
-}
+        return request({ method: 'users' });
+    },
 
-export default API
+    loadComments(postId) {
+        return request({ method: 'comments', query: { postId } });
+    }
+};
+
+export default API;

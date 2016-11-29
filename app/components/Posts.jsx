@@ -12,11 +12,12 @@ class Posts extends Component {
     }
 
     render() {
-        const { posts, usersById } = this.props;
+        const { posts, usersById, children } = this.props;
         return (
             <div className={s.Posts}>
                 <div className={s.Title}>Posts</div>
                 {posts.map(post => <Post key={post.id} post={post} user={usersById[post.userId]} />)}
+                {children}
             </div>
         );
     }
@@ -24,7 +25,8 @@ class Posts extends Component {
     static propTypes = {
         dispatch: PropTypes.func.isRequired,
         posts: PropTypes.array.isRequired,
-        usersById: PropTypes.object.isRequired
+        usersById: PropTypes.object.isRequired,
+        children: React.PropTypes.element
     };
 }
 

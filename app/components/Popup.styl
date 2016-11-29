@@ -1,0 +1,33 @@
+.Popup
+    position: absolute
+    right: 0
+    left: 0
+    margin: 40px auto
+    box-shadow: 0 0 100px rgba(#3e4757, .5)
+    box-sizing: border-box
+    background-color: #fff
+
+.Overlay
+    position: fixed
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    z-index: 9
+    overflow: auto
+    background-color: rgba(#30303c, .5)
+
+.Close
+    position: absolute
+    top: 0px
+    right: -50px
+    width: 40px
+    height: 40px
+    cursor: pointer
+    font: normal 80px/30px Arial, sans-serif
+    color: #fff
+
+    &:before
+        content: '+'
+        display: block
+        transform: rotate(45deg)
