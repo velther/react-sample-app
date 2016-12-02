@@ -139,7 +139,6 @@
         "react/prefer-es6-class": 2,
         "react/prefer-stateless-function": 2,
         "react/no-direct-mutation-state": 2,
-        "react/no-multi-comp": [2, { "ignoreStateless": true }],
         "react/no-string-refs": 2,
         "react/no-danger": 2,
         "react/no-deprecated": 2,
