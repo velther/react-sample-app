@@ -1,25 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { branch } from '../baobab-helper';
 import * as actions from '../actions';
-import { POST_SHAPE } from '../constants/shapes';
+import { ALBUM_SHAPE } from '../constants/shapes';
 
-import Post from './Post';
+import Album from './Album';
 import Loader from './Loader';
-import s from './Posts.styl';
+import s from './Albums.styl';
 
 class Posts extends Component {
     static fetchData() {
-        actions.loadPosts();
+        actions.loadAlbums();
         actions.loadUsers();
     }
 
     render() {
-        const { posts, usersById, children } = this.props;
+        const { albums, usersById, children } = this.props;
 
         return (
-            <div className={s.Posts}>
-                {posts ?
-                    posts.map(post => <Post key={post.id} post={post} user={usersById[post.userId]} />) :
+            <div className={s.Album}>
+                {albums ?
+                    albums.map(album => <Album key={album.id} album={album} user={usersById[album.userId]} />) :
                     <Loader />
                 }
                 {children}
@@ -28,13 +28,13 @@ class Posts extends Component {
     }
 
     static propTypes = {
-        posts: PropTypes.arrayOf(POST_SHAPE),
+        albums: PropTypes.arrayOf(ALBUM_SHAPE),
         usersById: PropTypes.object,
         children: React.PropTypes.element
     };
 }
 
 export default branch({
-    posts: ['posts'],
+    albums: ['albums'],
     usersById: ['usersById']
 }, Posts);

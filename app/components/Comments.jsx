@@ -1,36 +1,44 @@
 import React, { Component, PropTypes } from 'react';
-import { branch } from 'baobab-react/higher-order';
+import { routerShape } from 'react-router/lib/PropTypes';
+import { branch } from '../baobab-helper';
 import * as actions from '../actions';
 
 import Popup from './Popup';
 import Comment from './Comment';
+import Loader from './Loader';
 import s from './Comments.styl';
 
 class Comments extends Component {
-    componentDidMount() {
-        this.props.dispatch(actions.loadComments, this.props.params.postId);
-    }
+    static fetchData = ({ postId }) => {
+        return actions.loadComments(postId);
+    };
 
     render() {
         const { commentsByPostId, params: { postId } } = this.props;
-        const comments = commentsByPostId[postId];
+        const comments = commentsByPostId && commentsByPostId[postId];
         return (
             <Popup className={s.Comments} onClose={this.handlePopupClose}>
                 <div className={s.Title}>Commentaries</div>
-                {comments && comments.map(comment => <Comment key={comment.id} comment={comment} />)}
+
+                {comments ?
+                    comments.map(comment => <Comment key={comment.id} comment={comment} />) :
+                    <Loader />
+                }
             </Popup>
         );
     }
 
     handlePopupClose = () => {
-        this.props.router.push('/posts');
+        this.context.router.push('/posts');
+    };
+
+    static contextTypes = {
+        router: routerShape
     };
 
     static propTypes = {
-        commentsByPostId: PropTypes.object.isRequired,
-        dispatch: PropTypes.func.isRequired,
-        params: PropTypes.object.isRequired,
-        router: PropTypes.object.isRequired
+        commentsByPostId: PropTypes.object,
+        params: PropTypes.object.isRequired
     };
 }
 

@@ -37,6 +37,10 @@ const API = {
 
     loadComments(postId) {
         return request({ method: 'comments', query: { postId } });
+    },
+
+    loadAlbums() {
+        return request({ method: 'albums' });
     }
 };
 

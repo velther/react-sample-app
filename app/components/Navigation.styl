@@ -1,0 +1,38 @@
+.Navigation
+    font-weight: bold
+    font-family: Georgia, serif
+
+    &:after
+        content: ''
+        display: block
+        width: 100%
+        height: 2px
+        background: #888
+
+.Item
+    display: inline-block
+    color: #888
+    margin-right: 20px
+    font-size: 44px
+    text-decoration: none
+    transition: color .3s
+
+    &:hover
+        color: #444
+
+    &_isActive
+        font-size: 56px
+        color: #000
+
+        &:hover
+            color: #000
+
+        &:after
+            content: ''
+            display: block
+            width: 100%
+            height: 2px
+            background: #000
+            position: relative
+            top: 2px
+

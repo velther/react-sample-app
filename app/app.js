@@ -1,9 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Routes from './Routes';
-import { root } from 'baobab-react/higher-order';
+import { Router, browserHistory, applyRouterMiddleware } from 'react-router';
+import { Provider } from './baobab-helper';
+import routes from './Routes';
 
 import stateTree from './state-tree';
 
-const AppWithStore = root(stateTree, Routes);
-ReactDOM.render(<AppWithStore />, document.querySelector('.react-app'));
+function dataFetcher() {
+    return {
+        renderRouterContext(child, { components, params }) {
+            components.forEach(({ wrappedComponent }) => {
+                if (wrappedComponent && typeof wrappedComponent.fetchData === 'function') {
+                    wrappedComponent.fetchData(params);
+                }
+            });
+            return child;
+        }
+    };
+}
+const ConnectedApp = (
+    <Provider tree={stateTree}>
+        <Router history={browserHistory} routes={routes} render={applyRouterMiddleware(dataFetcher())} />
+    </Provider>
+);
+ReactDOM.render(ConnectedApp, document.querySelector('.react-app'));

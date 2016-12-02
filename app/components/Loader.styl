@@ -1,0 +1,24 @@
+@keyframes loading
+    0%
+        content: '.'
+
+    25%
+        content: '..'
+
+    50%
+        content: '...'
+
+    75%
+        content: '....'
+
+.Loader
+    padding: 20px 0
+
+.Inner
+    display: block
+    width: 75px
+    margin: auto
+
+    &:after
+        content: ''
+        animation: loading 1.5s infinite alternate
