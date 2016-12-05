@@ -23,7 +23,8 @@ module.exports = {
                     ],
                     plugins: [
                         'transform-class-properties',
-                        'transform-async-to-generator'
+                        'transform-async-to-generator',
+                        'transform-object-rest-spread'
                     ]
                 }
             },

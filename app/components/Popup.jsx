@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import cn from 'classnames';
 import s from './Popup.styl';
 
-export default class Comments extends Component {
+export default class Popup extends Component {
     componentDidMount() {
         this.popup = document.createElement('div');
         this.popupOverlay = document.createElement('div');
@@ -33,6 +33,7 @@ export default class Comments extends Component {
         return null;
     }
 
+    // NOTE: Context not passed here
     renderPopupContent(props) {
         const { className, children } = props;
         this.popup.className = cn(s.Popup, className);

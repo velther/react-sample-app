@@ -7,7 +7,7 @@ import Album from './Album';
 import Loader from './Loader';
 import s from './Albums.styl';
 
-class Posts extends Component {
+class Albums extends Component {
     static fetchData() {
         actions.loadAlbums();
         actions.loadUsers();
@@ -18,7 +18,7 @@ class Posts extends Component {
 
         return (
             <div className={s.Album}>
-                {albums ?
+                {albums.length ?
                     albums.map(album => <Album key={album.id} album={album} user={usersById[album.userId]} />) :
                     <Loader />
                 }
@@ -37,4 +37,4 @@ class Posts extends Component {
 export default branch({
     albums: ['albums'],
     usersById: ['usersById']
-}, Posts);
+}, Albums);

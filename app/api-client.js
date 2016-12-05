@@ -41,6 +41,10 @@ const API = {
 
     loadAlbums() {
         return request({ method: 'albums' });
+    },
+
+    loadPhotos(albumId) {
+        return request({ method: 'photos', query: { albumId } });
     }
 };
 

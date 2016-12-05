@@ -6,6 +6,9 @@ function isEmptyObject(obj) {
 }
 
 export async function loadPosts() {
+    if (stateTree.get('posts').length) {
+        return;
+    }
     try {
         const posts = await API.loadPosts();
         stateTree.set('posts', posts);
@@ -31,7 +34,7 @@ export async function loadUsers() {
 }
 
 export async function loadComments(postId) {
-    if (isEmptyObject(stateTree.get('commentsByPostId', postId))) {
+    if (stateTree.get('commentsByPostId', postId)) {
         return;
     }
     try {
@@ -43,6 +46,9 @@ export async function loadComments(postId) {
 }
 
 export async function loadAlbums() {
+    if (stateTree.get('albums').length) {
+        return;
+    }
     try {
         const albums = await API.loadAlbums();
         stateTree.set('albums', albums);
@@ -50,3 +56,16 @@ export async function loadAlbums() {
         stateTree.set('error', error);
     }
 }
+
+export async function loadPhotos(albumId) {
+    if (stateTree.get('photosByAlbumId', albumId)) {
+        return;
+    }
+    try {
+        const photos = await API.loadPhotos(albumId);
+        stateTree.merge('photosByAlbumId', { [albumId]: photos });
+    } catch (error) {
+        stateTree.set('error', error);
+    }
+}
+

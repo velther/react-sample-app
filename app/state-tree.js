@@ -5,7 +5,8 @@ const store = new Baobab({
     posts: [],
     usersById: {},
     commentsByPostId: {},
-    albums: []
+    albums: [],
+    photosByAlbumId: {}
 });
 
 export default store;

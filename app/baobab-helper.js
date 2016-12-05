@@ -11,6 +11,13 @@ export class Provider extends Component {
         super(props, context);
 
         this.tree = this.props.tree;
+
+        // simple baobab state logger
+        if (process.env.NODE_ENV !== 'production') {
+            this.tree.on('update', (e) => {
+                console.log(e); // eslint-disable-line no-console
+            });
+        }
     }
 
     render() {
@@ -36,6 +43,7 @@ export function branch(cursors, Component) {
 
             this.watcher = this.context.tree.watch(cursors);
             this.watcher.on('update', this.handleCursorUpdate);
+            this.state = this.watcher.get();
         }
 
         componentWillUnmount() {
