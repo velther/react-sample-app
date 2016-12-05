@@ -4,7 +4,8 @@
   "description": "Test react application with Baobab",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./entry.js"
+    "start": "nodemon ./entry.js",
+    "build": "NODE_ENV=production webpack"
   },
   "author": "Boris Mudruk",
   "license": "ISC",

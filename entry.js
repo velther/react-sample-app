@@ -16,5 +16,4 @@ new WebpackDevServer(webpack(webpackConfig), webpackConfig.devServer)
     });
 
 require('babel-register');
-require('css-modules-require-hook');
 require('./index');
