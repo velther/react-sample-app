@@ -14,7 +14,8 @@ class Posts extends Component {
     }
 
     render() {
-        const { posts, usersById, children } = this.props;
+        const { usersById, children, userId } = this.props;
+        const posts = !userId ? this.props.posts : this.props.posts.filter(post => post.userId === userId);
 
         return (
             <div className={s.Posts}>
@@ -30,7 +31,8 @@ class Posts extends Component {
     static propTypes = {
         posts: PropTypes.arrayOf(POST_SHAPE),
         usersById: PropTypes.object,
-        children: React.PropTypes.element
+        children: React.PropTypes.element,
+        userId: React.PropTypes.number
     };
 }
 

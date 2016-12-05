@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { locationShape } from 'react-router/lib/PropTypes';
 import { branch } from '../baobab-helper';
 import * as actions from '../actions';
 import { ALBUM_SHAPE } from '../constants/shapes';
@@ -14,7 +15,8 @@ class Albums extends Component {
     }
 
     render() {
-        const { albums, usersById, children } = this.props;
+        const { usersById, children, userId } = this.props;
+        const albums = !userId ? this.props.albums : this.props.albums.filter(album => album.userId === userId);
 
         return (
             <div className={s.Album}>
@@ -30,7 +32,9 @@ class Albums extends Component {
     static propTypes = {
         albums: PropTypes.arrayOf(ALBUM_SHAPE),
         usersById: PropTypes.object,
-        children: React.PropTypes.element
+        userId: PropTypes.number,
+        children: React.PropTypes.element,
+        returnLocation: locationShape
     };
 }
 

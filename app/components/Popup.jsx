@@ -23,6 +23,7 @@ export default class Popup extends Component {
     }
 
     componentWillUnmount() {
+        this.renderPopupContent({ ...this.props, children: null });
         this.popupOverlay.removeChild(this.popup);
         this.popupOverlay.removeEventListener('click', this.handlePopupClose);
         document.body.removeChild(this.popupOverlay);
@@ -51,6 +52,9 @@ export default class Popup extends Component {
     handlePopupClose = (event) => {
         if (event.target !== this.popupOverlay && event.target !== this.closeRef) {
             return;
+        }
+        if (event.target === this.closeRef) {
+            event.stopPropagation();
         }
         if (typeof this.props.onClose === 'function') {
             this.props.onClose();

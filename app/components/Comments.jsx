@@ -16,6 +16,7 @@ class Comments extends Component {
     render() {
         const { commentsByPostId, params: { postId } } = this.props;
         const comments = commentsByPostId && commentsByPostId[postId];
+
         return (
             <Popup className={s.Comments} onClose={this.handlePopupClose}>
                 <div className={s.Title}>Commentaries</div>
@@ -29,7 +30,11 @@ class Comments extends Component {
     }
 
     handlePopupClose = () => {
-        this.context.router.push('/posts');
+        const { router } = this.context;
+        const locationState = router.location.state;
+        const returnLocation = locationState && locationState.returnLocation || '/';
+
+        router.push(returnLocation);
     };
 
     static contextTypes = {

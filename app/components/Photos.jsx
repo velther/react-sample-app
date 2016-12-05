@@ -32,8 +32,10 @@ class Photos extends Component {
 
     handlePopupClose = () => {
         const { router } = this.context;
-        const { location } = router;
-        this.context.router.push({ ...location, pathname: '/albums', query: {} });
+        const locationState = router.location.state;
+        const returnLocation = locationState && locationState.returnLocation || router.location;
+
+        router.push({ ...returnLocation, query: {} });
     };
 
     handlePhotoChange = (index) => {
@@ -49,7 +51,8 @@ class Photos extends Component {
     static propTypes = {
         photosByAlbumId: PropTypes.object,
         params: PropTypes.object.isRequired,
-        location: locationShape.isRequired
+        location: locationShape.isRequired,
+        returnLocation: locationShape
     };
 }
 

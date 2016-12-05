@@ -6,6 +6,7 @@ import Posts from './components/Posts';
 import Comments from './components/Comments';
 import Albums from './components/Albums';
 import Photos from './components/Photos';
+import Users from './components/Users';
 
 export default (
     <Route path="/" component={App}>
@@ -15,7 +16,7 @@ export default (
         <Route path="albums" component={Albums}>
             <Route path=":albumId" component={Photos}/>
         </Route>
-        <Route path="user/:userId" />
+        <Route path="users/:userId" component={Users} />
         <IndexRoute component={Posts} />
     </Route>
 );

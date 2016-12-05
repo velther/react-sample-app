@@ -8,6 +8,8 @@ export default class Slider extends Component {
         selectedIndex: 0
     };
 
+    changeTimer = null;
+
     componentWillMount() {
         this.getSelectedPhotoIndex();
         this.setChangeTimer();
@@ -16,6 +18,10 @@ export default class Slider extends Component {
     componentWillReceiveProps({ selectedId }) {
         this.getSelectedPhotoIndex(selectedId);
         this.setChangeTimer();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.changeTimer);
     }
 
     render() {
@@ -56,7 +62,6 @@ export default class Slider extends Component {
         this.setState({ selectedIndex });
     }
 
-    changeTimer = null;
     setChangeTimer() {
         clearTimeout(this.changeTimer);
         this.changeTimer = setTimeout(() => {

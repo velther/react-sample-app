@@ -8,7 +8,7 @@ import s from './User.styl';
 export default function User({ user, className }) {
     return (
         <div className={cn(s.User, className)}>
-            by <Link className={s.Name} to={`/user/${user.id}`}>{user.name}</Link>
+            by <Link className={s.Name} to={`/users/${user.id}`}>{user.name}</Link>
         </div>
     );
 }
