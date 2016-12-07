@@ -1,13 +1,30 @@
-// import path from 'path';
-// import React from 'react';
-// import ReactDOMServer from 'react-dom/server';
-// import marko from 'marko';
+import path from 'path';
+import fs from 'fs';
 
-// import App from '../app/app.js';
+const isDev = process.env.NODE_ENV !== 'production';
+const styles = [];
+const scripts = [];
 
-// function findTemplate(template) {
-//     return path.join(__dirname, '../views', `${template}.marko`);
-// }
+if (isDev) {
+    scripts.push('<script src="//localhost:9000/main.bundle.js"></script>');
+} else {
+    try {
+        const assetsFile = fs.readFileSync(path.join(__dirname, '../assets.json'));
+        const assets = JSON.parse(assetsFile);
+        Object.keys(assets).forEach(key => {
+            const chunk = assets[key];
+            if (chunk.js) {
+                scripts.push(`<script src="${chunk.js}"></script>`);
+            }
+            if (chunk.css) {
+                styles.push(`<link rel="stylesheet" href="${chunk.css}">`);
+            }
+        });
+    } catch (error) {
+        // TODO: Redirect to error page
+        console.log(error); // eslint-disable-line no-console
+    }
+}
 
 const layout = `
 <!DOCTYPE html>
@@ -16,18 +33,17 @@ const layout = `
         <link rel="icon" href="favicon.ico">
         <link rel="icon" type="image/png" sizes="196x196" href="icon-196x196.png">
         <link rel="apple-touch-icon" type="image/png" href="icon-196x196.png">
+        ${styles.join('')}
         <title>Baobab test app</title>
     </head>
     <body>
         <div class="react-app"></div>
-        <script src="//localhost:9000/main.bundle.js"></script>
+        ${scripts.join('')}
     </body>
 </html>
 `;
 
-// TODO: Marko templates hot reloading
 export default async function renderer(ctx, next) {
-    // const reactString = ReactDOMServer.renderToString(<App />);
     ctx.body = layout;
     ctx.type = 'text/html';
     next();

@@ -1,14 +1,39 @@
+'use strict';
 const path = require('path');
-// const webpack = require('webpack');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const env = process.env.NODE_ENV;
 const isDev = env !== 'production';
 
+const cssLoaderConfig = {
+    loader: 'css-loader',
+    query: {
+        modules: true,
+        camelCase: true,
+        localIdentName: isDev ? '[name]-[local]' : '[name]-[local]-[hash:base64:5]'
+    }
+};
+
+const devStylesLoader = [
+    'style-loader',
+    cssLoaderConfig,
+    'stylus-loader'
+];
+
+const prodStylesLoader = ExtractTextPlugin.extract({
+    loader: [
+        cssLoaderConfig,
+        'stylus-loader'
+    ]
+});
+
 module.exports = {
     entry: ['babel-polyfill', './app/app.js'],
     output: {
-        filename: 'main.bundle.js',
-        path: path.join(__dirname, 'public/scripts')
+        filename: '[name]_[hash].js',
+        path: path.join(__dirname, 'public')
     },
     module: {
         rules: [
@@ -30,17 +55,7 @@ module.exports = {
             },
             {
                 test: /\.styl/,
-                loaders: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            localIdentName: '[name]-[local]'
-                        }
-                    },
-                    'stylus-loader'
-                ]
+                loaders: isDev ? devStylesLoader : prodStylesLoader
             }
         ]
     },
@@ -49,8 +64,13 @@ module.exports = {
         extensions: ['.js', '.json', '.jsx']
     },
     watch: isDev,
-    devtool: isDev ? 'source-map' : 'eval',
-    // plugins: isDev ? [ new webpack.HotModuleReplacementPlugin() ] : [],
+    devtool: isDev ? 'source-map' : false,
+    plugins: isDev ? [] : [
+        new webpack.EnvironmentPlugin(['NODE_ENV']),
+        new webpack.optimize.UglifyJsPlugin(),
+        new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
+        new AssetsPlugin({ filename: 'assets.json' })
+    ],
     devServer: {
         contentBase: [path.join(__dirname, 'public/scripts')],
         quiet: false,

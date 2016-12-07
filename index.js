@@ -1,30 +1,25 @@
-const PORT = process.env.port || 8080;
-
+import path from 'path';
 import Koa from 'koa';
+import serve from 'koa-static';
 import favicon from 'koa-favicon';
 import requestMw from './middleware/request.js';
 
+const PORT = process.env.port || 8080;
 const app = new Koa();
 
-// app.disable('x-powered-by');
-//
-// app.set('views', __dirname + '/views');
-// app.set('view engine', 'html');
-
 app.use(favicon(__dirname + '/app/static/favicon.ico'));
-// app.use('/', express.static(__dirname + '/public'));
 
-// app.get('/', (req, res) => {
-//     res.render('index');
-// });
-
+if (process.env.NODE_ENV === 'production') {
+    app.use(serve(path.join(__dirname, 'public')));
+}
 app.use(requestMw);
 
+/* eslint-disable no-console */
 const server = app
-    .listen(PORT, function () {
+    .listen(PORT, function() {
         console.log('Koa server listening on port ' + server.address().port);
     })
-    .on('error', function (err) {
+    .on('error', function(err) {
         if (err.code === 'EACCES') {
             console.log(`Error: port ${PORT} is already in use. Choose another one.`);
         } else {
@@ -32,5 +27,5 @@ const server = app
         }
         process.exit(1);
     });
-
+/* eslint-enable no-console */
 export default app;
