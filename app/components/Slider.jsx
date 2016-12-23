@@ -65,7 +65,7 @@ export default class Slider extends Component {
     setChangeTimer() {
         clearTimeout(this.changeTimer);
         this.changeTimer = setTimeout(() => {
-            if (this.state.selectedIndex < this.props.photos.length) {
+            if (this.state.selectedIndex < this.props.photos.length - 1) {
                 this.handleNextClick();
             } else {
                 this.props.onPhotoChange(this.props.photos[0].id);
