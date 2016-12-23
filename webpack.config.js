@@ -32,7 +32,7 @@ const prodStylesLoader = ExtractTextPlugin.extract({
 module.exports = {
     entry: ['babel-polyfill', './app/app.js'],
     output: {
-        filename: '[name]_[hash].js',
+        filename: isDev ? '[name].bundle.js' : '[name]_[hash].js',
         path: path.join(__dirname, 'public')
     },
     module: {
@@ -72,7 +72,7 @@ module.exports = {
         new AssetsPlugin({ filename: 'assets.json' })
     ],
     devServer: {
-        contentBase: [path.join(__dirname, 'public/scripts')],
+        contentBase: [path.join(__dirname, 'public')],
         quiet: false,
         stats: {
             errors: true
