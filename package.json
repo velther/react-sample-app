@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "description": "Test react application with Baobab",
   "main": "index.js",
+  "repository": "git@github.com:velther/react-sample-app.git",
+  "engines": {
+    "node" : ">=7.6.0"
+  },
   "scripts": {
     "start": "nodemon ./entry.js",
     "build": "NODE_ENV=production webpack",
