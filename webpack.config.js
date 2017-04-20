@@ -78,7 +78,7 @@ module.exports = {
             errors: true
         },
         compress: true,
-        // hot: true,
+        hot: true,
         port: 9000,
         proxy: {
             '/api/*': {
