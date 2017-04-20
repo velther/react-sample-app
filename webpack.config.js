@@ -34,17 +34,17 @@ const prodStylesLoader = ExtractTextPlugin.extract({
 
 module.exports = {
     entry: isDev ?
-        [
-            'babel-polyfill',
-            'react-hot-loader/patch',
-            'webpack-dev-server/client?http://localhost:9000',
-            'webpack/hot/only-dev-server',
-            './app/app.dev.js'
-        ] :
-        [
-            'babel-polyfill',
-            './app/app.prod.js'
-        ],
+    [
+        './app/lib/polyfill.js',
+        'react-hot-loader/patch',
+        'webpack-dev-server/client?http://localhost:9000',
+        'webpack/hot/only-dev-server',
+        './app/app.dev.js'
+    ] :
+    [
+        './app/lib/polyfill.js',
+        './app/app.prod.js'
+    ],
     output: {
         filename: isDev ? '[name].bundle.js' : '[name]_[hash].js',
         path: path.join(__dirname, 'public'),
@@ -91,7 +91,14 @@ module.exports = {
     plugins: ((isDev) => {
         const plugins = [
             new webpack.NamedModulesPlugin(),
-            new webpack.EnvironmentPlugin(['NODE_ENV'])
+            new webpack.EnvironmentPlugin(['NODE_ENV']),
+            new webpack.optimize.CommonsChunkPlugin({
+                name: 'vendor',
+                minChunks({ context }) {
+                    return context && context.indexOf('node_modules') !== -1;
+                }
+            }),
+            new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' })
         ];
 
         if (process.env.ANALYZE) {
@@ -99,15 +106,14 @@ module.exports = {
         }
 
         if (isDev) {
-            return [...pllugins, new webpack.HotModuleReplacementPlugin()];
+            return [...plugins, new webpack.HotModuleReplacementPlugin()];
         } else {
             return [
                 ...plugins,
-                new webpack.EnvironmentPlugin(['NODE_ENV']),
                 new webpack.optimize.UglifyJsPlugin(),
                 new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
                 new AssetsPlugin({ filename: 'assets.json' })
-            ]
+            ];
         }
     })(isDev),
     devServer: {

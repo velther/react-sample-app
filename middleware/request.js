@@ -6,6 +6,8 @@ const styles = [];
 const scripts = [];
 
 if (isDev) {
+    scripts.push('<script src="//localhost:9000/manifest.bundle.js"></script>');
+    scripts.push('<script src="//localhost:9000/vendor.bundle.js"></script>');
     scripts.push('<script src="//localhost:9000/main.bundle.js"></script>');
 } else {
     try {
