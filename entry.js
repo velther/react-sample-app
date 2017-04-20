@@ -1,11 +1,13 @@
-const DEV_SERVER_PORT = 9000;
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
 const webpackConfig = require('./webpack.config.js');
 
+const DEV_SERVER_PORT = webpackConfig.devServer.port;
+
 if (process.env.NODE_ENV !== 'production') {
-    webpackConfig.output.publicPath = `http://localhost:${DEV_SERVER_PORT}`;
+    // webpackConfig.output.publicPath = `http://localhost:${DEV_SERVER_PORT}/`;
+    // webpackConfig.devServer.publicPath = webpackConfig.output.publicPath;
 
     new WebpackDevServer(webpack(webpackConfig), webpackConfig.devServer)
         .listen(DEV_SERVER_PORT, err => {

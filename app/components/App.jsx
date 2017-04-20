@@ -1,18 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Navigation from './Navigation';
 import styles from './App.styl';
 
-export default class App extends Component {
-    render() {
-        return (
-            <div className={styles.Page}>
-                <Navigation />
-                {this.props.children}
-            </div>
-        );
-    }
-
-    static propTypes = {
-        children: PropTypes.element.isRequired
-    }
+export default function App({ children }) {
+    return (
+        <div className={styles.Page}>
+            <Navigation />
+            {children}
+        </div>
+    );
 }
+
+App.prototype.propTypes = {
+    children: PropTypes.element.isRequired
+};

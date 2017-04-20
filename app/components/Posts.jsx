@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { branch } from '../baobab-helper';
 import * as actions from '../actions';
 import { POST_SHAPE } from '../constants/shapes';
@@ -31,8 +32,8 @@ class Posts extends Component {
     static propTypes = {
         posts: PropTypes.arrayOf(POST_SHAPE),
         usersById: PropTypes.object,
-        children: React.PropTypes.element,
-        userId: React.PropTypes.number
+        children: PropTypes.element,
+        userId: PropTypes.number
     };
 }
 

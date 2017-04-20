@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 
+const DEV_SERVER_PORT = 9000;
+
 const env = process.env.NODE_ENV;
 const isDev = env !== 'production';
 
@@ -23,17 +25,29 @@ const devStylesLoader = [
 ];
 
 const prodStylesLoader = ExtractTextPlugin.extract({
-    loader: [
+    use: [
         cssLoaderConfig,
         'stylus-loader'
     ]
 });
 
 module.exports = {
-    entry: ['babel-polyfill', './app/app.js'],
+    entry: isDev ?
+        [
+            'babel-polyfill',
+            'react-hot-loader/patch',
+            'webpack-dev-server/client?http://localhost:9000',
+            'webpack/hot/only-dev-server',
+            './app/app.dev.js'
+        ] :
+        [
+            'babel-polyfill',
+            './app/app.prod.js'
+        ],
     output: {
         filename: isDev ? '[name].bundle.js' : '[name]_[hash].js',
-        path: path.join(__dirname, 'public')
+        path: path.join(__dirname, 'public'),
+        publicPath: isDev ? `http://localhost:${DEV_SERVER_PORT}/` : '/'
     },
     module: {
         rules: [
@@ -43,14 +57,22 @@ module.exports = {
                 exclude: /node_modules/,
                 options: {
                     presets: [
-                        'es2015',
+                        ['es2015', { modules: false }],
                         'react'
                     ],
-                    plugins: [
-                        'transform-class-properties',
-                        'transform-async-to-generator',
-                        'transform-object-rest-spread'
-                    ]
+                    plugins: ((isDev) => {
+                        const plugins = [
+                            'transform-class-properties',
+                            'transform-async-to-generator',
+                            'transform-object-rest-spread'
+                        ];
+
+                        if (isDev) {
+                            plugins.push('react-hot-loader/babel');
+                        }
+
+                        return plugins;
+                    })(isDev)
                 }
             },
             {
@@ -64,13 +86,19 @@ module.exports = {
         extensions: ['.js', '.json', '.jsx']
     },
     watch: isDev,
-    devtool: isDev ? 'source-map' : false,
-    plugins: isDev ? [] : [
-        new webpack.EnvironmentPlugin(['NODE_ENV']),
-        new webpack.optimize.UglifyJsPlugin(),
-        new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
-        new AssetsPlugin({ filename: 'assets.json' })
-    ],
+    devtool: isDev ? 'eval' : false,
+    plugins: isDev ?
+        [
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NamedModulesPlugin(),
+            new webpack.EnvironmentPlugin(['NODE_ENV'])
+        ] :
+        [
+            new webpack.EnvironmentPlugin(['NODE_ENV']),
+            new webpack.optimize.UglifyJsPlugin(),
+            new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
+            new AssetsPlugin({ filename: 'assets.json' })
+        ],
     devServer: {
         contentBase: [path.join(__dirname, 'public')],
         quiet: false,
@@ -79,7 +107,7 @@ module.exports = {
         },
         compress: true,
         hot: true,
-        port: 9000,
+        port: DEV_SERVER_PORT,
         proxy: {
             '/api/*': {
                 target: 'http://jsonplaceholder.typicode.com/',

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { locationShape } from 'react-router/lib/PropTypes';
 import { branch } from '../baobab-helper';
 import * as actions from '../actions';
@@ -33,7 +34,7 @@ class Albums extends Component {
         albums: PropTypes.arrayOf(ALBUM_SHAPE),
         usersById: PropTypes.object,
         userId: PropTypes.number,
-        children: React.PropTypes.element,
+        children: PropTypes.element,
         returnLocation: locationShape
     };
 }

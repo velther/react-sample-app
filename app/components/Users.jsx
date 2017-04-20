@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { routerShape } from 'react-router/lib/PropTypes';
 import * as actions from '../actions';
 import { branch } from '../baobab-helper';

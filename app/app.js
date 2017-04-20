@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Router, browserHistory, applyRouterMiddleware } from 'react-router';
 import { Provider } from './baobab-helper';
 import routes from './Routes';
@@ -18,9 +17,10 @@ function dataFetcher() {
         }
     };
 }
-const ConnectedApp = (
-    <Provider tree={stateTree}>
-        <Router history={browserHistory} routes={routes} render={applyRouterMiddleware(dataFetcher())} />
-    </Provider>
-);
-ReactDOM.render(ConnectedApp, document.querySelector('.react-app'));
+export default function ConnectedApp() {
+    return (
+        <Provider tree={stateTree}>
+            <Router history={browserHistory} routes={routes} render={applyRouterMiddleware(dataFetcher())} />
+        </Provider>
+    );
+}

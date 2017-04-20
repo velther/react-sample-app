@@ -1,4 +1,5 @@
-import React, { Component, PureComponent, PropTypes, Children } from 'react';
+import React, { Component, PureComponent, Children } from 'react';
+import PropTypes from 'prop-types';
 
 export class Provider extends Component {
     getChildContext() {

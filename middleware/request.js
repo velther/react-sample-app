@@ -37,7 +37,7 @@ const layout = `
         <title>Baobab test app</title>
     </head>
     <body>
-        <div class="react-app"></div>
+        <div id="react-app" class="react-app"></div>
         ${scripts.join('')}
     </body>
 </html>
