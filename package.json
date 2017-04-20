@@ -10,7 +10,7 @@
   "scripts": {
     "start": "nodemon ./entry.js",
     "build": "NODE_ENV=production webpack",
-    "debug": "NODE_ENV=production webpack --progress --colors --display-chunks --display-reasons --display-error-details"
+    "debug": "NODE_ENV=production ANALYZE=true webpack --progress --colors --display-chunks --display-reasons --display-error-details"
   },
   "author": "Boris Mudruk",
   "license": "ISC",
@@ -50,6 +50,7 @@
     "stylus": "0.54.5",
     "stylus-loader": "3.0.1",
     "webpack": "2.4.1",
+    "webpack-bundle-analyzer": "2.4.0",
     "webpack-dev-server": "2.4.2"
   }
 }

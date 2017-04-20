@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const DEV_SERVER_PORT = 9000;
 
@@ -87,18 +88,28 @@ module.exports = {
     },
     watch: isDev,
     devtool: isDev ? 'eval' : false,
-    plugins: isDev ?
-        [
-            new webpack.HotModuleReplacementPlugin(),
+    plugins: ((isDev) => {
+        const plugins = [
             new webpack.NamedModulesPlugin(),
             new webpack.EnvironmentPlugin(['NODE_ENV'])
-        ] :
-        [
-            new webpack.EnvironmentPlugin(['NODE_ENV']),
-            new webpack.optimize.UglifyJsPlugin(),
-            new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
-            new AssetsPlugin({ filename: 'assets.json' })
-        ],
+        ];
+
+        if (process.env.ANALYZE) {
+            plugins.push(new BundleAnalyzerPlugin());
+        }
+
+        if (isDev) {
+            return [...pllugins, new webpack.HotModuleReplacementPlugin()];
+        } else {
+            return [
+                ...plugins,
+                new webpack.EnvironmentPlugin(['NODE_ENV']),
+                new webpack.optimize.UglifyJsPlugin(),
+                new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
+                new AssetsPlugin({ filename: 'assets.json' })
+            ]
+        }
+    })(isDev),
     devServer: {
         contentBase: [path.join(__dirname, 'public')],
         quiet: false,
