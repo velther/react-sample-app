@@ -47,22 +47,6 @@ module.exports = {
         test: /.jsx?/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        options: {
-          presets: [['es2015', { modules: false }], 'react'],
-          plugins: (isDev => {
-            const plugins = [
-              'transform-class-properties',
-              'transform-async-to-generator',
-              'transform-object-rest-spread',
-            ];
-
-            if (isDev) {
-              plugins.push('react-hot-loader/babel');
-            }
-
-            return plugins;
-          })(isDev),
-        },
       },
       {
         test: /\.styl/,
