@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -22,11 +22,10 @@ const cssLoaderConfig = {
 
 const devStylesLoader = ['style-loader', cssLoaderConfig, 'stylus-loader'];
 
-const prodStylesLoader = ExtractTextPlugin.extract({
-  use: [cssLoaderConfig, 'stylus-loader'],
-});
+const prodStylesLoader = [MiniCssExtractPlugin.loader, cssLoaderConfig, 'stylus-loader'];
 
 module.exports = {
+  mode: env || 'development',
   entry: isDev ?
     [
       './app/lib/polyfill.js',
@@ -37,7 +36,7 @@ module.exports = {
     ] :
     ['./app/lib/polyfill.js', './app/app.prod.js'],
   output: {
-    filename: isDev ? '[name].bundle.js' : '[name]_[hash].js',
+    filename: isDev ? '[name].bundle.js' : '[name].[hash].js',
     path: path.join(__dirname, 'public'),
     publicPath: isDev ? `http://localhost:${DEV_SERVER_PORT}/` : '/',
   },
@@ -65,34 +64,24 @@ module.exports = {
       lib: path.join(cwd, 'app/lib'),
     },
   },
+  optimization: {
+    namedModules: true,
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   watch: isDev,
   devtool: isDev ? 'source-map' : false,
   plugins: (isDev => {
-    const plugins = [
-      new webpack.NamedModulesPlugin(),
-      new webpack.EnvironmentPlugin(['NODE_ENV']),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks({ context }) {
-          return context && context.indexOf('node_modules') !== -1;
-        },
-      }),
-      new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' }),
-    ];
-
+    const plugins = [new AssetsPlugin({ filename: 'assets.json' })];
     if (process.env.ANALYZE) {
       plugins.push(new BundleAnalyzerPlugin());
     }
 
     if (isDev) {
-      return [...plugins, new webpack.HotModuleReplacementPlugin()];
+      return [new webpack.HotModuleReplacementPlugin()];
     } else {
-      return [
-        ...plugins,
-        new webpack.optimize.UglifyJsPlugin(),
-        new ExtractTextPlugin({ filename: '[name]_[contenthash].css', allChunks: true }),
-        new AssetsPlugin({ filename: 'assets.json' }),
-      ];
+      return [...plugins, new MiniCssExtractPlugin({ filename: '[name]_[contenthash].css' })];
     }
   })(isDev),
   devServer: {

@@ -6,8 +6,7 @@ const styles = [];
 const scripts = [];
 
 if (isDev) {
-  scripts.push('<script src="//localhost:9000/manifest.bundle.js"></script>');
-  scripts.push('<script src="//localhost:9000/vendor.bundle.js"></script>');
+  scripts.push('<script src="//localhost:9000/vendors~main.bundle.js"></script>');
   scripts.push('<script src="//localhost:9000/main.bundle.js"></script>');
 } else {
   try {
@@ -23,8 +22,8 @@ if (isDev) {
       }
     });
   } catch (error) {
-    // TODO: Redirect to error page
-    console.log(error); // eslint-disable-line no-console
+    console.error(error); // eslint-disable-line no-console
+    process.exit(1);
   }
 }
 
@@ -36,7 +35,7 @@ const layout = `
         <link rel="icon" type="image/png" sizes="196x196" href="icon-196x196.png">
         <link rel="apple-touch-icon" type="image/png" href="icon-196x196.png">
         ${styles.join('')}
-        <title>Baobab test app</title>
+        <title>React Sample App</title>
     </head>
     <body>
         <div id="react-app" class="react-app"></div>
