@@ -1,12 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { NavLink as Link } from 'react-router-dom';
 import s from './Navigation.styl';
 
 export default function Navigation() {
-    return (
-        <div className={s.Navigation}>
-            <Link className={s.Item} activeClassName={s.Item_isActive} to="/" onlyActiveOnIndex>Posts</Link>
-            <Link className={s.Item} activeClassName={s.Item_isActive} to="/albums">Albums</Link>
-        </div>
-    );
+  return (
+    <div className={s.Navigation}>
+      <Link className={s.Item} activeClassName={s.Item_isActive} to="/" exact>
+        Posts
+      </Link>
+      <Link className={s.Item} activeClassName={s.Item_isActive} to="/albums">
+        Albums
+      </Link>
+    </div>
+  );
 }

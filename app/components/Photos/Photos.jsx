@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { routerShape, locationShape } from 'react-router/lib/PropTypes';
+import qs from 'querystring';
 import { branch } from 'lib/baobab-helper';
 import * as actions from 'actions';
 
@@ -11,13 +11,20 @@ import Slider from './components/Slider';
 import s from './Photos.styl';
 
 class Photos extends Component {
-  static fetchData = ({ albumId }) => {
+  static fetchData = ({ params: { albumId } }) => {
     return actions.loadPhotos(albumId);
   };
 
   render() {
-    const { photosByAlbumId, params: { albumId }, location: { query } } = this.props;
+    const {
+      photosByAlbumId,
+      match: {
+        params: { albumId },
+      },
+      location: { search },
+    } = this.props;
     const photos = photosByAlbumId && photosByAlbumId[albumId];
+    const query = qs.parse(search.substr(1));
     const selectedId = query && query.photoId ? Number(query.photoId) : 1;
 
     return (
@@ -32,34 +39,31 @@ class Photos extends Component {
   }
 
   handlePopupClose = () => {
-    const { router } = this.context;
-    const locationState = router.location.state;
-    const returnLocation = (locationState && locationState.returnLocation) || router.location;
+    const { location, history } = this.props;
+    const returnLocation = (location.state && location.state.returnLocation) || {
+      ...location,
+      pathname: '/albums',
+    };
 
-    router.push({ ...returnLocation, query: {} });
+    history.push({ ...returnLocation, search: qs.stringify({}) });
   };
 
   handlePhotoChange = index => {
-    const { router } = this.context;
-    const { location } = router;
-    this.context.router.push({ ...location, query: { photoId: index } });
-  };
-
-  static contextTypes = {
-    router: routerShape,
+    const { location, history } = this.props;
+    history.push({ ...location, search: qs.stringify({ photoId: index }) });
   };
 
   static propTypes = {
     photosByAlbumId: PropTypes.object,
-    params: PropTypes.object.isRequired,
-    location: locationShape.isRequired,
-    returnLocation: locationShape,
+    match: PropTypes.shape({
+      params: PropTypes.object.isRequired,
+    }).isRequired,
+    location: PropTypes.object.isRequired,
+    returnLocation: PropTypes.object,
+    history: PropTypes.object,
   };
 }
 
-export default branch(
-  {
-    photosByAlbumId: ['photosByAlbumId'],
-  },
-  Photos,
-);
+export default branch({
+  photosByAlbumId: ['photosByAlbumId'],
+})(Photos);

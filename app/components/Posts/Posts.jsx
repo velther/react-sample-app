@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { renderRoutes } from 'react-router-config';
 import PropTypes from 'prop-types';
 import { branch } from 'lib/baobab-helper';
 import * as actions from 'actions';
@@ -16,7 +17,7 @@ class Posts extends Component {
   }
 
   render() {
-    const { usersById, children, userId } = this.props;
+    const { usersById, userId, route } = this.props;
     const posts = !userId ?
       this.props.posts :
       this.props.posts.filter(post => post.userId === userId);
@@ -28,7 +29,7 @@ class Posts extends Component {
         ) : (
           <Loader />
         )}
-        {children}
+        {route && renderRoutes(route.routes)}
       </div>
     );
   }
@@ -38,13 +39,11 @@ class Posts extends Component {
     usersById: PropTypes.object,
     children: PropTypes.element,
     userId: PropTypes.number,
+    route: PropTypes.shape({ route: PropTypes.array }),
   };
 }
 
-export default branch(
-  {
-    posts: ['posts'],
-    usersById: ['usersById'],
-  },
-  Posts,
-);
+export default branch({
+  posts: ['posts'],
+  usersById: ['usersById'],
+})(Posts);

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router';
-import { routerShape } from 'react-router/lib/PropTypes';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import User from 'common/User';
 
@@ -8,26 +8,28 @@ import { POST_SHAPE, USER_SHAPE } from 'constants/shapes';
 
 import s from './Post.styl';
 
-const makeCommentLocation = (post, router) => ({
-  ...router.location,
+const makeCommentLocation = (post, location) => ({
+  ...location,
   pathname: `/posts/comments/${post.id}`,
   state: {
-    returnLocation: router.location,
+    returnLocation: location,
   },
 });
 
 class Post extends PureComponent {
-  state = {
-    commentsLocation: makeCommentLocation(this.props.post, this.context.router),
-  };
+  state = {};
+
+  static getDerivedStateFromProps = props => ({
+    commentsLocation: makeCommentLocation(props.post, props.location),
+  });
 
   render() {
     const { post, user } = this.props;
-    const { router } = this.context;
+    const { commentsLocation } = this.state;
 
     return (
       <div className={s.Container}>
-        <Link className={s.Title} to={makeCommentLocation(post, router)}>
+        <Link className={s.Title} to={commentsLocation}>
           {post.title}
         </Link>
         <div className={s.Content}>{post.body}</div>
@@ -38,7 +40,7 @@ class Post extends PureComponent {
 }
 
 Post.contextTypes = {
-  router: routerShape,
+  router: PropTypes.object,
 };
 
 Post.propTypes = {

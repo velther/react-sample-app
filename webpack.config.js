@@ -104,6 +104,7 @@ module.exports = {
     compress: true,
     hot: true,
     port: DEV_SERVER_PORT,
+    headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
       '/api/*': {
         target: 'http://jsonplaceholder.typicode.com/',

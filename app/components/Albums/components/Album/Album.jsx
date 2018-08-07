@@ -1,24 +1,26 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router';
-import { routerShape } from 'react-router/lib/PropTypes';
+import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import { USER_SHAPE, ALBUM_SHAPE } from 'constants/shapes';
 
 import User from 'common/User';
 
 import s from './Album.styl';
 
-const makePhotosLocation = (album, router) => ({
-  ...router.location,
+const makePhotosLocation = (album, location) => ({
+  ...location,
   pathname: `/albums/${album.id}`,
   state: {
-    returnLocation: router.location,
+    returnLocation: location,
   },
 });
 
 class Album extends PureComponent {
-  state = {
-    photosLocation: makePhotosLocation(this.props.album, this.context.router),
-  };
+  state = {};
+
+  static getDerivedStateFromProps = props => ({
+    photosLocation: makePhotosLocation(props.album, props.location),
+  });
 
   render() {
     const { album, user } = this.props;
@@ -35,13 +37,10 @@ class Album extends PureComponent {
   }
 }
 
-Album.contextTypes = {
-  router: routerShape,
-};
-
 Album.propTypes = {
   album: ALBUM_SHAPE.isRequired,
-  user: USER_SHAPE.isRequired,
+  user: USER_SHAPE,
+  location: PropTypes.object,
 };
 
-export default Album;
+export default withRouter(Album);

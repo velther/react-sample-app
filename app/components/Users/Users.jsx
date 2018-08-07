@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { routerShape } from 'react-router/lib/PropTypes';
 import * as actions from 'actions';
 import { branch } from 'lib/baobab-helper';
 
@@ -18,15 +17,18 @@ class Users extends Component {
   }
 
   render() {
-    const { params, usersById } = this.props;
-    const { router: { location } } = this.context;
+    const {
+      match: { params },
+      location,
+      usersById,
+    } = this.props;
     const user = usersById[params.userId];
 
     return (
       <div className={s.Users}>
         <UserProfile user={user} />
         {!!user && (
-          <React.Fragment>
+          <Fragment>
             <div className={s.Section}>
               <div className={s.SectionTitle}>User posts</div>
               <Posts userId={user.id} returnLocation={location} />
@@ -36,25 +38,19 @@ class Users extends Component {
               <div className={s.SectionTitle}>User albums</div>
               <Albums userId={user.id} returnLocation={location} />
             </div>
-          </React.Fragment>
+          </Fragment>
         )}
       </div>
     );
   }
 
-  static contextTypes = {
-    router: routerShape,
-  };
-
   static propTypes = {
     usersById: PropTypes.object,
-    params: PropTypes.object.isRequired,
+    location: PropTypes.object,
+    match: PropTypes.shape({ params: PropTypes.object.isRequired }).isRequired,
   };
 }
 
-export default branch(
-  {
-    usersById: ['usersById'],
-  },
-  Users,
-);
+export default branch({
+  usersById: ['usersById'],
+})(Users);

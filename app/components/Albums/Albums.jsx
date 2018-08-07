@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { locationShape } from 'react-router/lib/PropTypes';
+import { renderRoutes } from 'react-router-config';
 import { branch } from 'lib/baobab-helper';
 import * as actions from 'actions';
 import { ALBUM_SHAPE } from 'constants/shapes';
@@ -16,7 +16,7 @@ class Albums extends Component {
   }
 
   render() {
-    const { usersById, children, userId } = this.props;
+    const { usersById, route, userId } = this.props;
     const albums = !userId ?
       this.props.albums :
       this.props.albums.filter(album => album.userId === userId);
@@ -28,7 +28,7 @@ class Albums extends Component {
         ) : (
           <Loader />
         )}
-        {children}
+        {route && renderRoutes(route.routes)}
       </div>
     );
   }
@@ -37,15 +37,12 @@ class Albums extends Component {
     albums: PropTypes.arrayOf(ALBUM_SHAPE),
     usersById: PropTypes.object,
     userId: PropTypes.number,
-    children: PropTypes.element,
-    returnLocation: locationShape,
+    route: PropTypes.shape({ route: PropTypes.array }),
+    returnLocation: PropTypes.object,
   };
 }
 
-export default branch(
-  {
-    albums: ['albums'],
-    usersById: ['usersById'],
-  },
-  Albums,
-);
+export default branch({
+  albums: ['albums'],
+  usersById: ['usersById'],
+})(Albums);
