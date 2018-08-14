@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Navigation from './components/Navigation';
+
+import { LOCATION_SHAPE } from 'constants/shapes';
+
 import DataFetcher from 'lib/data-fetcher';
+import Navigation from './components/Navigation';
+
 import styles from './App.styl';
 
 const App = ({ route, location }) => (
@@ -15,7 +19,7 @@ App.prototype.propTypes = {
   route: PropTypes.shape({
     routes: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
-  location: PropTypes.object.isRequired,
+  location: LOCATION_SHAPE.isRequired,
 };
 
 export default App;

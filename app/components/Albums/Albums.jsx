@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 import { branch } from 'lib/baobab-helper';
 import * as actions from 'actions';
-import { ALBUM_SHAPE } from 'constants/shapes';
+import { ALBUM_SHAPE, USER_SHAPE } from 'constants/shapes';
 
 import Loader from 'common/Loader';
 import Album from './components/Album';
@@ -16,15 +16,15 @@ class Albums extends Component {
   }
 
   render() {
-    const { usersById, route, userId } = this.props;
-    const albums = !userId ?
-      this.props.albums :
-      this.props.albums.filter(album => album.userId === userId);
+    const { usersById, route, userId, albums } = this.props;
+    const albumsToShow = !userId ? albums : albums.filter(album => album.userId === userId);
 
     return (
       <div className={s.Album}>
-        {albums.length ? (
-          albums.map(album => <Album key={album.id} album={album} user={usersById[album.userId]} />)
+        {albumsToShow.length ? (
+          albumsToShow.map(album => (
+            <Album key={album.id} album={album} user={usersById[album.userId]} />
+          ))
         ) : (
           <Loader />
         )}
@@ -32,15 +32,14 @@ class Albums extends Component {
       </div>
     );
   }
-
-  static propTypes = {
-    albums: PropTypes.arrayOf(ALBUM_SHAPE),
-    usersById: PropTypes.object,
-    userId: PropTypes.number,
-    route: PropTypes.shape({ route: PropTypes.array }),
-    returnLocation: PropTypes.object,
-  };
 }
+
+Albums.propTypes = {
+  albums: PropTypes.arrayOf(ALBUM_SHAPE).isRequired,
+  usersById: PropTypes.objectOf(USER_SHAPE).isRequired,
+  userId: PropTypes.number,
+  route: PropTypes.shape({ route: PropTypes.array }),
+};
 
 export default branch({
   albums: ['albums'],

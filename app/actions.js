@@ -24,6 +24,7 @@ export async function loadUsers() {
   try {
     const users = await API.loadUsers();
     const usersById = users.reduce((result, user) => {
+      // eslint-disable-next-line no-param-reassign
       result[user.id] = user;
       return result;
     }, {});

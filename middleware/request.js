@@ -12,7 +12,7 @@ if (isDev) {
   try {
     const assetsFile = fs.readFileSync(path.join(__dirname, '../assets.json'));
     const assets = JSON.parse(assetsFile);
-    Object.keys(assets).forEach(key => {
+    Object.keys(assets).forEach((key) => {
       const chunk = assets[key];
       if (chunk.js) {
         scripts.push(`<script src="${chunk.js}"></script>`);

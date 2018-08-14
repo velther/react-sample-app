@@ -1,9 +1,8 @@
-'use strict';
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const DEV_SERVER_PORT = 9000;
 
@@ -26,15 +25,15 @@ const prodStylesLoader = [MiniCssExtractPlugin.loader, cssLoaderConfig, 'stylus-
 
 module.exports = {
   mode: env || 'development',
-  entry: isDev ?
-    [
+  entry: isDev
+    ? [
       './app/lib/polyfill.js',
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:9000',
       'webpack/hot/only-dev-server',
       './app/app.dev.js',
-    ] :
-    ['./app/lib/polyfill.js', './app/app.prod.js'],
+    ]
+    : ['./app/lib/polyfill.js', './app/app.prod.js'],
   output: {
     filename: isDev ? '[name].bundle.js' : '[name].[hash].js',
     path: path.join(__dirname, 'public'),
@@ -72,7 +71,7 @@ module.exports = {
   },
   watch: isDev,
   devtool: isDev ? 'source-map' : false,
-  plugins: (isDev => {
+  plugins: (() => {
     const plugins = [new AssetsPlugin({ filename: 'assets.json' })];
     if (process.env.ANALYZE) {
       plugins.push(new BundleAnalyzerPlugin());
@@ -80,10 +79,9 @@ module.exports = {
 
     if (isDev) {
       return [new webpack.HotModuleReplacementPlugin()];
-    } else {
-      return [...plugins, new MiniCssExtractPlugin({ filename: '[name]_[contenthash].css' })];
     }
-  })(isDev),
+    return [...plugins, new MiniCssExtractPlugin({ filename: '[name]_[contenthash].css' })];
+  })(),
   devServer: {
     contentBase: [path.join(__dirname, 'public')],
     quiet: false,

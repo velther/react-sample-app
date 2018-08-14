@@ -8,7 +8,11 @@ class ProfileField extends PureComponent {
     const { label, value } = this.props;
     return (
       <div className={s.ProfileField}>
-        <span className={s.ProfileFieldLabel}>{label}: </span>
+        <span className={s.ProfileFieldLabel}>
+          {label}
+:
+          {' '}
+        </span>
         <span className={s.ProfileFieldValue}>{value}</span>
       </div>
     );

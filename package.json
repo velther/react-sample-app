@@ -10,7 +10,20 @@
   "scripts": {
     "start": "nodemon ./entry.js",
     "build": "NODE_ENV=production webpack",
-    "debug": "NODE_ENV=production ANALYZE=true webpack --progress --colors --display-chunks --display-reasons --display-error-details"
+    "build:debug": "NODE_ENV=production ANALYZE=true webpack --progress --colors --display-chunks --display-reasons --display-error-details",
+    "lint": "eslint . --ext .js --ext .jsx",
+    "lint:fix": "eslint . --ext .js --ext .jsx --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "browserlist": [
     "last 2 versions"
@@ -36,10 +49,16 @@
     "baobab": "2.5.2",
     "core-js": "2.5.7",
     "css-loader": "1.0.0",
-    "eslint": "5.3.0",
-    "eslint-plugin-react": "7.11.0",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-import-resolver-webpack": "0.10.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0",
     "extract-text-webpack-plugin": "3.0.2",
     "fbjs": "0.8.17",
+    "husky": "0.14.3",
+    "lint-staged": "7.2.2",
     "mini-css-extract-plugin": "0.4.1",
     "nodemon": "1.18.3",
     "prop-types": "15.6.2",

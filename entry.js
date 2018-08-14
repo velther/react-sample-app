@@ -8,7 +8,7 @@ const DEV_SERVER_PORT = webpackConfig.devServer.port;
 if (process.env.NODE_ENV !== 'production') {
   new WebpackDevServer(webpack(webpackConfig), webpackConfig.devServer).listen(
     DEV_SERVER_PORT,
-    err => {
+    (err) => {
       if (err) {
         // eslint-disable-next-line no-console
         console.log('[webpack-dev-server]', err);

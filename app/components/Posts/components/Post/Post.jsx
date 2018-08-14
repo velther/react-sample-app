@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import User from 'common/User';
@@ -38,10 +37,6 @@ class Post extends PureComponent {
     );
   }
 }
-
-Post.contextTypes = {
-  router: PropTypes.object,
-};
 
 Post.propTypes = {
   post: POST_SHAPE.isRequired,

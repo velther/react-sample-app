@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqual from 'fbjs/lib/shallowEqual';
 import { matchRoutes, renderRoutes } from 'react-router-config';
+import { LOCATION_SHAPE } from 'constants/shapes';
 
 class DataFetcher extends Component {
   componentDidMount() {
@@ -9,7 +10,8 @@ class DataFetcher extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!shallowEqual(this.props.location, prevProps.location)) {
+    const { location } = this.props;
+    if (!shallowEqual(location, prevProps.location)) {
       this.fetchRoutes();
     }
   }
@@ -23,9 +25,9 @@ class DataFetcher extends Component {
         const { component } = route;
 
         if (
-          component &&
-          component.wrappedComponent &&
-          typeof component.wrappedComponent.fetchData === 'function'
+          component
+          && component.wrappedComponent
+          && typeof component.wrappedComponent.fetchData === 'function'
         ) {
           result.push(component.wrappedComponent.fetchData(match, location));
         }
@@ -36,13 +38,14 @@ class DataFetcher extends Component {
   }
 
   render() {
-    return renderRoutes(this.props.routes);
+    const { routes } = this.props;
+    return renderRoutes(routes);
   }
 }
 
 DataFetcher.propTypes = {
-  location: PropTypes.object.isRequired,
-  routes: PropTypes.array.isRequired,
+  location: LOCATION_SHAPE.isRequired,
+  routes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default DataFetcher;

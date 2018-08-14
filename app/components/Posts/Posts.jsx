@@ -3,7 +3,7 @@ import { renderRoutes } from 'react-router-config';
 import PropTypes from 'prop-types';
 import { branch } from 'lib/baobab-helper';
 import * as actions from 'actions';
-import { POST_SHAPE } from 'constants/shapes';
+import { POST_SHAPE, USER_SHAPE } from 'constants/shapes';
 
 import Loader from 'common/Loader';
 
@@ -17,15 +17,13 @@ class Posts extends Component {
   }
 
   render() {
-    const { usersById, userId, route } = this.props;
-    const posts = !userId ?
-      this.props.posts :
-      this.props.posts.filter(post => post.userId === userId);
+    const { usersById, userId, route, posts } = this.props;
+    const postsToShow = !userId ? posts : posts.filter(post => post.userId === userId);
 
     return (
       <div className={s.Posts}>
-        {posts ? (
-          posts.map(post => <Post key={post.id} post={post} user={usersById[post.userId]} />)
+        {postsToShow ? (
+          postsToShow.map(post => <Post key={post.id} post={post} user={usersById[post.userId]} />)
         ) : (
           <Loader />
         )}
@@ -33,15 +31,14 @@ class Posts extends Component {
       </div>
     );
   }
-
-  static propTypes = {
-    posts: PropTypes.arrayOf(POST_SHAPE),
-    usersById: PropTypes.object,
-    children: PropTypes.element,
-    userId: PropTypes.number,
-    route: PropTypes.shape({ route: PropTypes.array }),
-  };
 }
+
+Posts.propTypes = {
+  posts: PropTypes.arrayOf(POST_SHAPE),
+  usersById: PropTypes.objectOf(USER_SHAPE),
+  userId: PropTypes.number,
+  route: PropTypes.shape({ routes: PropTypes.array }),
+};
 
 export default branch({
   posts: ['posts'],

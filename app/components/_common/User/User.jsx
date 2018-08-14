@@ -12,7 +12,8 @@ class User extends PureComponent {
 
     return (
       <div className={cn(s.User, className)}>
-        by{' '}
+        by
+        {' '}
         <Link className={s.Name} to={`/users/${user.id}`}>
           {user.name}
         </Link>

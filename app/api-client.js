@@ -1,51 +1,49 @@
 const API_URL = 'http://localhost:9000/api';
 
+const fetchOptions = {
+  method: 'get',
+  mode: 'cors',
+  credentials: 'include',
+  headers: new Headers({ 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' }),
+};
+
 async function request({ method, id = '', query }) {
-    let url = `${API_URL}/${method}/${id}`;
+  let url = `${API_URL}/${method}/${id}`;
 
-    if (query !== undefined) {
-        const searchParams = new URLSearchParams();
-        for (let key in query) {
-            if (query.hasOwnProperty(key)) {
-                searchParams.append(key, query[key]);
-            }
-        }
-        url += `?${searchParams.toString()}`;
-    }
+  if (query !== undefined) {
+    const searchParams = Object.entries(query).reduce((result, [key, value]) => {
+      result.append(key, value);
+      return result;
+    }, new URLSearchParams());
+    url += `?${searchParams.toString()}`;
+  }
 
-    const response = await fetch(
-        url,
-        {
-            method: 'get',
-            mode: 'cors',
-            credentials: 'include',
-            headers: new Headers({ 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' })
-        }
-    );
+  const response = await fetch(url, fetchOptions);
 
-    return await response.json();
+  // eslint-disable-next-line no-return-await
+  return await response.json();
 }
 
 const API = {
-    loadPosts() {
-        return request({ method: 'posts' });
-    },
+  loadPosts() {
+    return request({ method: 'posts' });
+  },
 
-    loadUsers() {
-        return request({ method: 'users' });
-    },
+  loadUsers() {
+    return request({ method: 'users' });
+  },
 
-    loadComments(postId) {
-        return request({ method: 'comments', query: { postId } });
-    },
+  loadComments(postId) {
+    return request({ method: 'comments', query: { postId } });
+  },
 
-    loadAlbums() {
-        return request({ method: 'albums' });
-    },
+  loadAlbums() {
+    return request({ method: 'albums' });
+  },
 
-    loadPhotos(albumId) {
-        return request({ method: 'photos', query: { albumId } });
-    }
+  loadPhotos(albumId) {
+    return request({ method: 'photos', query: { albumId } });
+  },
 };
 
 export default API;

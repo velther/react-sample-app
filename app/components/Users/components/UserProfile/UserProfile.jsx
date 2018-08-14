@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import { USER_SHAPE } from 'constants/shapes';
 
@@ -10,7 +11,7 @@ import s from './UserProfile.styl';
 
 class UserProfile extends PureComponent {
   render() {
-    const { user } = this.props;
+    const { user, className } = this.props;
     if (!user) {
       return <Loader />;
     }
@@ -18,7 +19,7 @@ class UserProfile extends PureComponent {
     const { address, company } = user;
 
     return (
-      <div className={s.Profile}>
+      <div className={cn(s.Profile, className)}>
         <div className={s.Part}>
           <ProfileField label="name" value={user.name} />
           <ProfileField label="username" value={user.username} />

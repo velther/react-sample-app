@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import * as actions from 'actions';
 import { branch } from 'lib/baobab-helper';
+import { USER_SHAPE, LOCATION_SHAPE } from 'constants/shapes';
 
 import Posts from 'components/Posts';
 import Albums from 'components/Albums';
@@ -43,13 +44,15 @@ class Users extends Component {
       </div>
     );
   }
-
-  static propTypes = {
-    usersById: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.shape({ params: PropTypes.object.isRequired }).isRequired,
-  };
 }
+
+Users.propTypes = {
+  usersById: PropTypes.objectOf(USER_SHAPE).isRequired,
+  location: LOCATION_SHAPE.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.object.isRequired,
+  }).isRequired,
+};
 
 export default branch({
   usersById: ['usersById'],

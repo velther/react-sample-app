@@ -1,10 +1,12 @@
+/* eslint-disable react/jsx-filename-extension */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
 import ConnectedApp from './app';
 
-const render = Component => {
+const render = (Component) => {
   ReactDOM.render(
     <AppContainer>
       <Component />
@@ -17,7 +19,8 @@ render(ConnectedApp);
 
 if (module.hot) {
   module.hot.accept('./app', () => {
-    const ConnectedApp = require('./app').default;
-    render(ConnectedApp);
+    // eslint-disable-next-line global-require
+    const App = require('./app').default;
+    render(App);
   });
 }
