@@ -74,7 +74,7 @@
     "stylus": "0.54.5",
     "stylus-loader": "3.0.2",
     "webpack": "4.16.5",
-    "webpack-bundle-analyzer": "3.3.2",
+    "webpack-bundle-analyzer": "4.9.1",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.8.0"
   }
